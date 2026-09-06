@@ -64,7 +64,6 @@
         background: var(--dimmer);
       }
 
-      /* CURSOR */
       #cur-dot,
       #cur-ring {
         position: fixed;
@@ -97,7 +96,6 @@
         opacity: 0.3;
       }
 
-      /* NOISE */
       .noise {
         position: fixed;
         inset: 0;
@@ -108,7 +106,6 @@
         background-size: 200px 200px;
       }
 
-      /* NAV */
       nav {
         position: fixed;
         top: 0;
@@ -214,7 +211,6 @@
         color: var(--white);
       }
 
-      /* HERO */
       #hero {
         min-height: 100vh;
         display: grid;
@@ -380,7 +376,6 @@
         border: none;
       }
 
-      /* ABOUT */
       #about {
         border-top: 1px solid var(--line);
       }
@@ -561,7 +556,6 @@
         border-color: var(--white);
       }
 
-      /* SKILLS */
       #skills {
         border-top: 1px solid var(--line);
       }
@@ -650,7 +644,6 @@
         border-color: var(--white);
       }
 
-      /* PROJECTS */
       #projects {
         border-top: 1px solid var(--line);
       }
@@ -805,7 +798,6 @@
         border-color: var(--dim);
       }
 
-      /* CONTACT */
       #contact {
         border-top: 1px solid var(--line);
       }
@@ -909,7 +901,6 @@
         margin-top: 2rem;
       }
 
-      /* FOOTER */
       footer {
         border-top: 1px solid var(--line);
         padding: 1.4rem 2.5rem;
@@ -925,7 +916,6 @@
         text-transform: uppercase;
       }
 
-      /* REVEAL */
       .rv {
         opacity: 0;
         transform: translateY(32px);
@@ -972,7 +962,6 @@
         transition-delay: 0.32s;
       }
 
-      /* RESPONSIVE */
       @media (max-width: 900px) {
         nav {
           padding: 1.2rem 1.5rem;
@@ -1108,7 +1097,6 @@
       <a href="#contact" onclick="toggleMenu()">Contact</a>
     </div>
 
-    <!-- HERO -->
     <section id="hero">
       <canvas id="cat-canvas"></canvas>
       <div class="grid-lines" aria-hidden="true">
@@ -1145,7 +1133,6 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about">
       <div class="about-header rv">
         <div class="about-num">01</div>
@@ -1216,7 +1203,6 @@
       </div>
     </section>
 
-    <!-- SKILLS -->
     <section id="skills">
       <div class="skills-header rv">
         <div class="skills-num">02</div>
@@ -1274,7 +1260,6 @@
       </div>
     </section>
 
-    <!-- PROJECTS -->
     <section id="projects">
       <div class="projects-header rv">
         <div class="projects-num">03</div>
@@ -1388,7 +1373,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact">
       <div class="contact-header rv">
         <div class="contact-num">04</div>
@@ -1443,17 +1427,12 @@
     </footer>
 
     <script>
-      /* ════════════════════════════════════════════════
-   HALFTONE EYES — fully self-contained
-   Everything is dot-based, pupils track mouse
-   with smooth lerp, clipped inside eye almonds.
-════════════════════════════════════════════════ */
+
       (function () {
         const cv = document.getElementById("cat-canvas");
         const ctx = cv.getContext("2d");
         let W, H;
 
-        /* live mouse pos relative to canvas */
         const mouse = { x: 0, y: 0 };
         document.addEventListener("mousemove", (e) => {
           const r = cv.getBoundingClientRect();
@@ -1472,28 +1451,24 @@
           maskCache = null;
         });
 
-        /* ── LOGICAL SPACE ─────────────────────────────
-     700 × 340 units, two eyes side by side.
-     All geometry defined here once.           ── */
+
         const LW = 700,
           LH = 340;
         const EYE = [
-          { cx: 175, cy: 160 } /* left  */,
-          { cx: 525, cy: 160 } /* right */,
+          { cx: 175, cy: 160 } ,
+          { cx: 525, cy: 160 } ,
         ];
-        const ERX = 135; /* eye half-width  */
-        const ERY = 75; /* eye half-height */
-        const PR = 48; /* pupil radius    */
-        const PT = 36; /* pupil travel    */
+        const ERX = 135; 
+        const ERY = 75;
+        const PR = 48;
+        const PT = 36;
 
-        /* lerped pupil positions (canvas px) */
         const pup = [
           { x: 0, y: 0 },
           { x: 0, y: 0 },
         ];
 
-        /* ── BUILD STATIC MASK (eye whites only) ─────
-     Called once; result reused every frame.  ── */
+
         let maskCache = null;
         function buildMask(mW, mH) {
           const oc = document.createElement("canvas");
@@ -1503,11 +1478,9 @@
           const sx = mW / LW,
             sy = mH / LH;
 
-          /* black bg */
           ox.fillStyle = "#000";
           ox.fillRect(0, 0, mW, mH);
 
-          /* eye whites */
           ox.fillStyle = "#fff";
           EYE.forEach((e) => {
             const cx = e.cx * sx,
@@ -1536,7 +1509,6 @@
             ox.fill();
           });
 
-          /* punch out pupil zone so no white dots there */
           ox.fillStyle = "#000";
           EYE.forEach((e) => {
             ox.beginPath();
@@ -1547,9 +1519,7 @@
           return oc;
         }
 
-        /* ── DRAW ONE HALFTONE PASS ───────────────────
-     Samples `maskCanvas` pixel brightness and
-     paints dots on the main ctx.             ── */
+
         function htPass(
           maskCanvas,
           offX,
@@ -1567,7 +1537,7 @@
             .getContext("2d")
             .getImageData(0, 0, mW, mH).data;
           const scx = dispW / mW,
-            scy = dispH / mH; /* mask→display scale */
+            scy = dispH / mH; 
 
           for (let gy = gap * 0.5; gy < mH; gy += gap) {
             for (let gx = gap * 0.5; gx < mW; gx += gap) {
@@ -1590,19 +1560,11 @@
           }
         }
 
-        /* ── DRAW PUPIL AS HALFTONE DOTS ─────────────
-     Radial brightness map:
-       0 – 0.30 → void (dark center)
-       0.30 – 0.68 → ramp up  (iris)
-       0.68 – 0.90 → peak     (iris bright ring)
-       0.90 – 1.10 → fall off (soft edge)
-     Grid is anchored to pupil center so it
-     moves with it.                           ── */
+        
         function drawPupilHT(ecx, ecy, px, py, pr, irx, iry) {
           const GAP = 5.5;
 
           ctx.save();
-          /* clip: almond eye shape */
           ctx.beginPath();
           ctx.moveTo(ecx - irx, ecy);
           ctx.bezierCurveTo(
@@ -1624,7 +1586,6 @@
           ctx.closePath();
           ctx.clip();
 
-          /* scan bounding box around iris, grid anchored to pupil */
           const r1 = pr * 1.12;
           const startX = px - Math.ceil(r1 / GAP) * GAP;
           const startY = py - Math.ceil(r1 / GAP) * GAP;
@@ -1652,7 +1613,6 @@
             }
           }
 
-          /* single crisp specular highlight dot */
           ctx.beginPath();
           ctx.arc(px - pr * 0.3, py - pr * 0.35, pr * 0.13, 0, Math.PI * 2);
           ctx.fillStyle = "rgba(255,255,255,0.95)";
@@ -1661,15 +1621,12 @@
           ctx.restore();
         }
 
-        /* ── MAIN RAF LOOP ───────────────────────────── */
         function draw() {
           ctx.clearRect(0, 0, W, H);
 
-          /* bg */
           ctx.fillStyle = "#050505";
           ctx.fillRect(0, 0, W, H);
 
-          /* layout: center eyes, max 78% canvas width */
           const dispW = Math.min(W * 0.8, 800);
           const dispH = dispW * (LH / LW);
           const offX = (W - dispW) / 2;
@@ -1677,7 +1634,6 @@
           const scX = dispW / LW;
           const scY = dispH / LH;
 
-          /* soft radial glow */
           const gl = ctx.createRadialGradient(
             W * 0.5,
             H * 0.5,
@@ -1691,18 +1647,15 @@
           ctx.fillStyle = gl;
           ctx.fillRect(0, 0, W, H);
 
-          /* build (or reuse) scaled mask */
           const mW = Math.round(dispW),
             mH = Math.round(dispH);
           if (!maskCache || maskCache.width !== mW)
             maskCache = buildMask(mW, mH);
 
-          /* halftone passes: eye whites */
           htPass(maskCache, offX, offY, dispW, dispH, 18, 5.5, 2.5, 0.5);
           htPass(maskCache, offX, offY, dispW, dispH, 11, 3.2, 1.4, 0.68);
           htPass(maskCache, offX, offY, dispW, dispH, 6, 1.6, 0.7, 0.86);
 
-          /* pupil tracking + halftone render */
           EYE.forEach((e, i) => {
             const ecx = offX + e.cx * scX;
             const ecy = offY + e.cy * scY;
@@ -1711,14 +1664,12 @@
             const pr = PR * scX;
             const trv = PT * scX;
 
-            /* target = mouse direction, clamped to travel */
             const dx = mouse.x - ecx,
               dy = mouse.y - ecy;
             const dist = Math.sqrt(dx * dx + dy * dy) || 1;
             const tx = ecx + (dx / dist) * Math.min(dist, trv);
             const ty = ecy + (dy / dist) * Math.min(dist, trv);
 
-            /* lerp */
             pup[i].x += (tx - pup[i].x) * 0.09;
             pup[i].y += (ty - pup[i].y) * 0.09;
 
@@ -1768,15 +1719,13 @@
           el.addEventListener("mouseleave", () => ring.classList.remove("big"));
         });
 
-      /* ── TYPED ── */
       const phrases = [
         "Programmer",
         "Data Analyst",
-        "Machine Learning Engineer",
+        "Machine Learning",
         "Data Engineer",
         "Python Enthusiast",
         "Web Developer",
-        "Beginner. Learning. Growing.",
       ];
       let pi = 0,
         ci = 0,
@@ -1808,13 +1757,11 @@
       }
       type();
 
-      /* ── MOBILE MENU ── */
       function toggleMenu() {
         document.getElementById("hbg").classList.toggle("open");
         document.getElementById("mob-menu").classList.toggle("open");
       }
 
-      /* ── SCROLL REVEAL ── */
       const obs = new IntersectionObserver(
         (entries) =>
           entries.forEach((e) => {
